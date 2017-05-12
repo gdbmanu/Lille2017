@@ -89,12 +89,12 @@ Aix Marseille Univ, Inserm, INS, Institut de Neurosciences des Systèmes, Marsei
 \begin{frame}\frametitle{Actionable universe (Bandit problem)}
 	\begin{itemize}
 		\item Repertoire of K possible \emph{actions} : 1, ..., K
-		\item Learn the \emph{effect-of-action} through a sequence of trial: $y_1$, ..., $y_t$, ...
-		\item Every action $y_t$ brings an \textit{information} (feedback) $f_t$ 
+		\item Learn the \emph{effect-of-action} through a sequence of trial: $\tilde {y}_1$, ..., $\tilde{y}_t$, ...
+		\item Every action $\tilde{y}_t$ brings an \textit{information} (feedback) $f_t$ 
 		(which in turn provides a \textit{loss} $l_t$)
 		\item Exploration/exploitation dilemma :
 		\begin{itemize}
-			\item (either) Better predict the effect-of-action $W_t \simeq P(f|y)$
+			\item (either) Better predict the effect-of-action $W_t \simeq P(f|\tilde{y})$
 			\item (or) minimize regret $$ \sum_{t \in 1,..,T} l_t - l^*_t$$ 
 		\end{itemize}
 	\end{itemize}
@@ -123,7 +123,7 @@ Related problems :
 
 \begin{frame}\frametitle{Role of feedback}
 	\begin{block}{}
-		The feedback/loss function interplay is the core of learning.
+		The feedback/loss function interplay is at the core of learning.
 	\end{block}
  \begin{itemize}
  	\item Bandit case : 
@@ -177,14 +177,14 @@ Related problems :
 
 
 \begin{frame}
-	\frametitle{Linear classifiers}
+	\frametitle{}
 	\begin{itemize}
 		\item Task : character recognition, face recognition etc.
-		\item Observation / observation space : $x \in \mathbb{R}^d $ 
+		\item Observation / observation space : $x  $ 
 		\item Labels : $1,...,K$
 		\item Linear assumption : 
 		\begin{itemize}
-			\item Similarity measure $\langle .,. \rangle$ on observation space
+			
 			\item Close according to $\langle .,. \rangle \leftrightarrow$ same label ?
 		\end{itemize}
 		\item One linear mapping for each label :
@@ -194,12 +194,15 @@ Related problems :
 	\end{itemize}
 \end{frame}
 
-
-\begin{frame}
-	\frametitle{The Banditron \cite{kakade2008efficient}}
-%	inspiré du Perceptron multiclasse \cite{rosenblatt1958perceptron,duda1973pattern}
-	\begin{small}
-				\begin{exampleblock}{}
+\begin{frame}{Linear classifiers}
+	Similarity measure $\langle .,. \rangle$ on observation space
+	\begin{itemize}
+		\item Multiclass : 
+		\begin{itemize}
+			\item Task : character recognition, face recognition etc.
+			\item read $X_t = x_t \in \mathbb{R}^d$, find its category $y_t$
+			\item Labels : $1,...,K$
+			\begin{exampleblock}{}
 				$
 				\left.
 				\begin{array}{l}
@@ -209,14 +212,41 @@ Related problems :
 				\right\}
 				\text{ so that : }
 				\langle W, X^k_t\rangle = \langle w_k, x_t\rangle
+				$	
+			\end{exampleblock}	
+		\end{itemize}
+		\item Scoring/ranking : 
+		\begin{itemize}
+			\item read $X_t = (x_t^1, ..., x_t^K) \in \mathbb{R}^{Kd}$, identify best match $y$ to target
+			\begin{exampleblock}{}
 				$
-				
-			\end{exampleblock}
+				\left.
+				\begin{array}{l}
+				W = w \in \mathbb{R}^{d}\\
+				X_t^k \triangleq x_t^k \in \mathbb{R}^{d}
+				\end{array}
+				\right\}
+				\text{ so that : }
+				\langle W, X^k_t\rangle = \langle w, x_t^k\rangle
+				$	
+			\end{exampleblock}	
+		\end{itemize}
+	\end{itemize}
+
+\end{frame}
+
+	
+
+\begin{frame}
+	\frametitle{The Banditron \cite{kakade2008efficient}}
+%	inspiré du Perceptron multiclasse \cite{rosenblatt1958perceptron,duda1973pattern}
+	\begin{small}
+	Inspired by the multiclass perceptron.
 	\begin{block}{}
 		$\forall t \in 1,...,T :$
 		\begin{align*}
 		&\text{1. Read } 
-		&& x_t 
+		&& X_t 
 		\\
 		&\text{2. Choose :} 
 		&& \hat{y}_t = \underset{k \in\{1,..,K\}}{\text{argmax}}  \langle W_{t-1}, X_t^k \rangle 
@@ -231,7 +261,7 @@ Related problems :
 		&& W_t = W_{t-1} + \frac{{\color{red}f_t}\cdot X_t^{\tilde{y}_t}}{P(\tilde{Y}_t=\tilde{y}_t)} - X_t^{\hat{y}_t} 
 		\end{align*}
 	\end{block}
-		Regret : $O(T^{2/3})$ ??!!
+		Regret : $O(T^{2/3})$ ??!! Non-sparse.
 	\end{small}
 
 \end{frame}
@@ -281,7 +311,7 @@ Related problems :
 				\item "all-or-nothing" feedback
 				\item clic, like, visit, follow, retweet ...
 			\end{itemize}
-			\item Unary coding / Binary guiding : 
+			\item Unary coding ("one-hot")/ Binary guiding : 
 			\begin{itemize}
 				\item every $x_t$ (context) promotes a unique expected label $y_t$
 				(any other response is a miss)
@@ -290,57 +320,84 @@ Related problems :
 		$\rightarrow$ The uniqueness of the expected label $y_t$ needs to be expressed in a loss function.
 \end{frame}
 
-\begin{frame}\frametitle{Classical label-aware loss functions}
-	\begin{itemize}
-		\item Logistic loss:
-		\begin{align*} 
-		l &= -  \langle W, X^y \rangle + \log \sum_{k=1}^K \exp\langle W, X^k\rangle
-		\end{align*}
-		\item Hinge loss: 
-		\begin{itemize}
-			\item Relative loss (Kessler)~:
-			$$l =  \left[ 1 -  \langle W, X^y \rangle + \max_{k \neq y} \langle W, X^k\rangle\right]_+$$
-			\item Absolute (One-Versus-All)~:
-			$$l = \sum_{k=1}^K \left[1 + (1 - 2 \delta(y,k)) \langle W, X^k\rangle\right]_+$$
-		\end{itemize}
-	\end{itemize}
+
+
+\begin{frame}\frametitle{Label-aware online learning loss functions}
+	Observation : $X$; expected label : ${\color{red}y}$; 
+	\small
+	\begin{columns}
+		\begin{column}{.8\linewidth}
+			\begin{footnotesize}
+			\begin{itemize}
+				\item Logistic loss:
+				\begin{align*} 
+				l &= - \log \frac{\exp \langle W, X^{\color{red}y} \rangle}{ \sum_{k=1}^K \exp\langle W, X^k\rangle}
+				\end{align*}
+				\item Hinge loss: 
+				\begin{itemize}
+					\item Relative loss (Kessler)~:
+					$$l =  \left[ 1 -  \langle W, X^{\color{red}y} \rangle + \max_{k \neq y} \langle W, X^k\rangle\right]_+$$
+					\item Absolute (One-Versus-All)~:
+					$$l = \sum_{k=1}^K \left[1 + (1 - 2 \delta({\color{red}y},k)) \langle W, X^k\rangle\right]_+$$
+				\end{itemize}
+			\end{itemize}
+			\end{footnotesize}			
+		\end{column}
+		\begin{column}{.2\linewidth}
+			\centerline{\includegraphics[width=\linewidth]{figs/loss.png}}
+		\end{column}	
+	\end{columns}
+	\normalsize
 	
 \end{frame}
 
-
+\subsection{Daucé, E, Proix, T, Ralaivola, L; proc. of IJCNN 2015}
 
 \begin{frame}\frametitle{Policy gradient \cite{Wil92}}
-	
+	\small
+	\begin{footnotesize}
+
+
 	\begin{itemize}
+		\item Read $X$
 		\item Stochastic policy : $\tilde{y} \sim \text{Multinomial}(\boldsymbol{\pi})$ with :
-		\begin{exampleblock}{}
-			$$ \forall k,  \pi(k) = \frac{\exp\langle W_{t-1}, X^k\rangle}{\sum_{\ell}\exp\langle W_{t-1}, X^\ell\rangle}$$
-		\end{exampleblock}
-		\item Linear model : $W = (w_1,..,w_K) \in \mathbb{R}^{K d}$ ; 
-			$X_t^k \triangleq (\vec{0}, ...,  x_t, ..., \vec{0}) \in \mathbb{R}^{K d}$
-		\item Each response $\tilde{y}$ provides a \emph{reward} ${\color{violet}r}$
+		\begin{columns}[b]
+			\begin{column}{.35\linewidth}
+				\begin{exampleblock}{}
+					$$ \pi(k) = \frac{\exp\langle W, X^k\rangle}{\sum_{\ell}\exp\langle W, X^\ell\rangle}$$
+				\end{exampleblock}
+			\end{column}
+			\begin{column}{.4\linewidth}
+				\begin{exampleblock}{}
+					$$ \pi(k) =  (1-\varepsilon) \delta(k,\hat{y}) + \frac{\varepsilon}{K} $$
+				\end{exampleblock}
+			\end{column}
+			\begin{column}{.1\linewidth}
+				\begin{exampleblock}{}
+					etc.
+				\end{exampleblock}
+			\end{column}				
+		\end{columns}
+		
+		
+		\item Each response $\tilde{y} \sim \text{Multinomial}(\boldsymbol{\pi})$ provides a \emph{reward} ${\color{violet}r}$
 	\end{itemize}
 	    
     $\rightarrow$ find $W^*$ that maximizes the reward expectation :
 		$$ W^*  = \text{argmax}_W \mathbb{E}({\color{violet}r})|_W$$
 		using gradient ascent : 
 		$$ W \leftarrow W + \eta \nabla_W \mathbb{E}({\color{violet}r})|_W $$
-
+	\end{footnotesize}
+	\normalsize
 \end{frame}
 
-\begin{frame}
-	IJCNN 2015
-	\newline
-	\newline
-	\centerline{\includegraphics[width=\linewidth]{figs/ijcnn-2015.png}}
-\end{frame}
 
 \begin{frame}\frametitle{Policy gradient {\color{red} with binary guiding}}
 	\begin{block}{}
 		$\forall t \in 1,...,T :$
 		\begin{align*}
 		&\text{1. Read } 
-		&& x_t 
+		&& X_t 
 		\\
 		&\text{2. Choose :} 
 		&& \forall k, \pi(k) = \frac{\exp\langle W_{t-1}, X_t^k\rangle}{\sum_{\ell}\exp\langle W_{t-1}, X_t^\ell\rangle}
