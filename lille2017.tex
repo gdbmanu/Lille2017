@@ -274,12 +274,40 @@ Related problems :
 	\tableofcontents[currentsection]
 \end{frame}    
 
-\begin{frame}
-	IJCNN 2015
-	\newline
-	\newline
-	\centerline{\includegraphics[width=\linewidth]{figs/ijcnn-2015.png}}
+\begin{frame}\frametitle{Main question}
+		\begin{itemize}
+			\item Binary feedback:
+			\begin{itemize}
+				\item "all-or-nothing" feedback
+				\item clic, like, visit, follow, retweet ...
+			\end{itemize}
+			\item Unary coding / Binary guiding : 
+			\begin{itemize}
+				\item every $x_t$ (context) promotes a unique expected label $y_t$
+				(any other response is a miss)
+			\end{itemize}
+		\end{itemize}
+		$\rightarrow$ The uniqueness of the expected label $y_t$ needs to be expressed in a loss function.
 \end{frame}
+
+\begin{frame}\frametitle{Classical label-aware loss functions}
+	\begin{itemize}
+		\item Logistic loss:
+		\begin{align*} 
+		l &= -  \langle W, X^y \rangle + \log \sum_{k=1}^K \exp\langle W, X^k\rangle
+		\end{align*}
+		\item Hinge loss: 
+		\begin{itemize}
+			\item Relative loss (Kessler)~:
+			$$l =  \left[ 1 -  \langle W, X^y \rangle + \max_{k \neq y} \langle W, X^k\rangle\right]_+$$
+			\item Absolute (One-Versus-All)~:
+			$$l = \sum_{k=1}^K \left[1 + (1 - 2 \delta(y,k)) \langle W, X^k\rangle\right]_+$$
+		\end{itemize}
+	\end{itemize}
+	
+\end{frame}
+
+
 
 \begin{frame}\frametitle{Policy gradient \cite{Wil92}}
 	
@@ -298,6 +326,13 @@ Related problems :
 		using gradient ascent : 
 		$$ W \leftarrow W + \eta \nabla_W \mathbb{E}({\color{violet}r})|_W $$
 
+\end{frame}
+
+\begin{frame}
+	IJCNN 2015
+	\newline
+	\newline
+	\centerline{\includegraphics[width=\linewidth]{figs/ijcnn-2015.png}}
 \end{frame}
 
 \begin{frame}\frametitle{Policy gradient {\color{red} with binary guiding}}
@@ -342,7 +377,7 @@ Related problems :
 			\end{itemize}
 		\end{column}		
 	\end{columns}
--\end{frame}
+\end{frame}
 
 \begin{frame}
 	\frametitle{La perte "Hinge" multiclasse ($y_t \in \{1,...,K\}$)}
