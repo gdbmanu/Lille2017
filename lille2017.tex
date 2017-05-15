@@ -41,7 +41,9 @@ Aix Marseille Univ, Inserm, INS, Institut de Neurosciences des Systèmes, Marsei
 \end{frame}     
 
 \begin{frame}\frametitle{Recommender systems vs. Biological control systems}
-	\centerline{\includegraphics[width=\linewidth]{figs/cap-frog-col.png}}
+	\begin{center}
+		\includegraphics[width=\linewidth]{figs/cap-frog-col.png}
+	\end{center}
 	\begin{columns}
 		\begin{column}{.45 \linewidth}
 			\begin{itemize}
@@ -89,7 +91,7 @@ Aix Marseille Univ, Inserm, INS, Institut de Neurosciences des Systèmes, Marsei
 \begin{frame}\frametitle{Actionable universe (Bandit problem)}
 	\begin{itemize}
 		\item Repertoire of K possible \emph{actions} : 1, ..., K
-		\item Learn the \emph{effect-of-action} through a sequence of trial: $\tilde {y}_1$, ..., $\tilde{y}_t$, ...
+		\item Learn the effect-of-action through a sequence of trial: $\tilde {y}_1$, ..., $\tilde{y}_t$, ...
 		\item Every action $\tilde{y}_t$ brings an \textit{information} (feedback) $f_t$ 
 		(which in turn provides a \textit{loss} $l_t$)
 		\item Exploration/exploitation dilemma :
@@ -176,23 +178,23 @@ Related problems :
 
 
 
-\begin{frame}
-	\frametitle{}
-	\begin{itemize}
-		\item Task : character recognition, face recognition etc.
-		\item Observation / observation space : $x  $ 
-		\item Labels : $1,...,K$
-		\item Linear assumption : 
-		\begin{itemize}
-			
-			\item Close according to $\langle .,. \rangle \leftrightarrow$ same label ?
-		\end{itemize}
-		\item One linear mapping for each label :
-		$$ W = (w_1, ..., w_K) \in \mathbb{R}^{Kd}$$
-		\item Similarity-based response (\textit{Winner-takes-all}):
-		$$ \hat{y} = \underset{k \in 1,...,K}{\text{argmax}}\langle w_k,x\rangle$$
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+%	\frametitle{}
+%	\begin{itemize}
+%		\item Task : character recognition, face recognition etc.
+%		\item Observation / observation space : $x  $ 
+%		\item Labels : $1,...,K$
+%		\item Linear assumption : 
+%		\begin{itemize}
+%			
+%			\item Close according to $\langle .,. \rangle \leftrightarrow$ same label ?
+%		\end{itemize}
+%		\item One linear mapping for each label :
+%		$$ W = (w_1, ..., w_K) \in \mathbb{R}^{Kd}$$
+%		\item Similarity-based response (\textit{Winner-takes-all}):
+%		$$ \hat{y} = \underset{k \in 1,...,K}{\text{argmax}}\langle w_k,x\rangle$$
+%	\end{itemize}
+%\end{frame}
 
 \begin{frame}{Linear classifiers}
 	Similarity measure $\langle .,. \rangle$ on observation space
@@ -241,7 +243,7 @@ Related problems :
 	\frametitle{The Banditron \cite{kakade2008efficient}}
 %	inspiré du Perceptron multiclasse \cite{rosenblatt1958perceptron,duda1973pattern}
 	\begin{small}
-	Inspired by the multiclass perceptron.
+	Inspired by the multiclass perceptron \cite{rosenblatt1958perceptron,duda1973pattern}
 	\begin{block}{}
 		$\forall t \in 1,...,T :$
 		\begin{align*}
@@ -261,7 +263,7 @@ Related problems :
 		&& W_t = W_{t-1} + \frac{{\color{red}f_t}\cdot X_t^{\tilde{y}_t}}{P(\tilde{Y}_t=\tilde{y}_t)} - X_t^{\hat{y}_t} 
 		\end{align*}
 	\end{block}
-		Regret : $O(T^{2/3})$ ??!! Non-sparse.
+		Regret : $O(T^{2/3})$; Non-sparse.
 	\end{small}
 
 \end{frame}
@@ -274,8 +276,8 @@ Related problems :
 		\item Contextual bandits
 		\item Choice based on :
 		\begin{itemize}
-			\item Confidence intervals (UCB)\cite{lai1985asymptotically}
-			\item Order 2 Perceptron \cite{cesa2005second}
+			\item Confidence intervals (UCB)\cite{lai1985asymptotically}, LinUCB \cite{auer2002using}
+			\item 2nd order Perceptron \cite{cesa2005second}
 			\item Examples :
 			\begin{itemize}
 				\item\cite{li2010contextual}
@@ -286,7 +288,7 @@ Related problems :
 		\end{itemize} 
 		\item Regret $O(\sqrt{T})$ in the stationary case.
 		\item The update relies on an estimator of
-		$\mathbb{E}\left[ \left{\langle}{X_t^{\hat{y}_t}}, X_t^{\hat{y}_t}\right{\rangle}\right]$:
+		$\mathbb{E}\left[ {X_t^{\hat{y}_t}}^T X_t^{\hat{y}_t}\right]$:
 		\begin{itemize}
 			\item  $O(d^2)$ cost in space
 			\item Non sparse
@@ -296,51 +298,43 @@ Related problems :
 \end{frame}
 
 
-
-\section{Contributions}
-\subsection{}
-
-\begin{frame}
-	\tableofcontents[currentsection]
-\end{frame}    
-
 \begin{frame}\frametitle{Main question}
+	\begin{itemize}
+		\item Binary feedback: $f_t \in \{0,1\}$
 		\begin{itemize}
-			\item Binary feedback:
-			\begin{itemize}
-				\item "all-or-nothing" feedback
-				\item clic, like, visit, follow, retweet ...
-			\end{itemize}
-			\item Unary coding ("one-hot")/ Binary guiding : 
-			\begin{itemize}
-				\item every $x_t$ (context) promotes a unique expected label $y_t$
-				(any other response is a miss)
-			\end{itemize}
+			\item "all-or-nothing" feedback
+			\item clic, like, visit, follow, retweet ...
 		\end{itemize}
-		$\rightarrow$ The uniqueness of the expected label $y_t$ needs to be expressed in a loss function.
+		\item Unary coding ("one-hot")/ Binary guiding : 
+		\begin{itemize}
+			\item every $x_t$ (context) promotes a unique expected label $y_t$
+			(any other response is a miss)
+		\end{itemize}
+	\end{itemize}
+	$\rightarrow$ The uniqueness of the expected label $y_t$ needs to be expressed in a loss function.
 \end{frame}
 
 
 
-\begin{frame}\frametitle{Label-aware online learning loss functions}
-	Observation : $X$; expected label : ${\color{red}y}$; 
+\begin{frame}\frametitle{Classical label-aware online learning loss functions}
+	Observation : $X$; expected label : ${\color{green}y}$; 
 	\small
 	\begin{columns}
 		\begin{column}{.8\linewidth}
 			\begin{footnotesize}
-			\begin{itemize}
-				\item Logistic loss:
-				\begin{align*} 
-				l &= - \log \frac{\exp \langle W, X^{\color{red}y} \rangle}{ \sum_{k=1}^K \exp\langle W, X^k\rangle}
-				\end{align*}
-				\item Hinge loss: 
 				\begin{itemize}
-					\item Relative loss (Kessler)~:
-					$$l =  \left[ 1 -  \langle W, X^{\color{red}y} \rangle + \max_{k \neq y} \langle W, X^k\rangle\right]_+$$
-					\item Absolute (One-Versus-All)~:
-					$$l = \sum_{k=1}^K \left[1 + (1 - 2 \delta({\color{red}y},k)) \langle W, X^k\rangle\right]_+$$
+					\item Logistic loss:
+					\begin{align*} 
+					l &= - \log \frac{\exp \langle W, X^{\color{green}y} \rangle}{ \sum_{k=1}^K \exp\langle W, X^k\rangle}
+					\end{align*}
+					\item Hinge loss: 
+					\begin{itemize}
+						\item Relative loss (Kessler)~:
+						$$l =  \left[ 1 -  \langle W, X^{\color{green}y} \rangle + \max_{k \neq y} \langle W, X^k\rangle\right]_+$$
+						\item Absolute (One-Versus-All)~:
+						$$l = \sum_{k=1}^K \left[1 + (1 - 2 \delta({\color{green}y},k)) \langle W, X^k\rangle\right]_+$$
+					\end{itemize}
 				\end{itemize}
-			\end{itemize}
 			\end{footnotesize}			
 		\end{column}
 		\begin{column}{.2\linewidth}
@@ -351,12 +345,19 @@ Related problems :
 	
 \end{frame}
 
+
+\section{Contributions}
+
 \subsection{Daucé, E, Proix, T, Ralaivola, L; proc. of IJCNN 2015}
+\begin{frame}
+	\tableofcontents[currentsubsection]
+\end{frame} 
 
 \begin{frame}\frametitle{Policy gradient \cite{Wil92}}
 	\small
 	\begin{footnotesize}
 
+	Model-free RL, POMDP, temporal credit assignment etc...
 
 	\begin{itemize}
 		\item Read $X$
@@ -400,7 +401,7 @@ Related problems :
 		&& X_t 
 		\\
 		&\text{2. Choose :} 
-		&& \forall k, \pi(k) = \frac{\exp\langle W_{t-1}, X_t^k\rangle}{\sum_{\ell}\exp\langle W_{t-1}, X_t^\ell\rangle}
+		&& \forall k, \pi(k|X_t) = \frac{\exp\langle W_{t-1}, X_t^k\rangle}{\sum_{\ell}\exp\langle W_{t-1}, X_t^\ell\rangle}
 		\\
 		&
 		&& \tilde{y}_t \sim \text{Multinomial}(\boldsymbol{\pi})
@@ -412,94 +413,142 @@ Related problems :
 		&& {\color{violet}r_t} =  {\color{red} f_t} r^+ +(1-{\color{red} f_t}) r^-
 		\\
 		&\text{4. Update :} 
-		&& W_t = W_{t-1} + \eta {\color{violet}r_t} \left(X_t^{\tilde{y}_t} - \sum_k \pi(k) X_t^k \right) 
+		&& W_t = W_{t-1} + \eta {\color{violet}r_t} \left(X_t^{\tilde{y}_t} - \sum_k \pi(k|X_t) X_t^k \right) 
 		\end{align*}
 	\end{block}	
 	
 \end{frame}
 
-	
-
-\begin{frame}
-	\frametitle{La perte "Hinge" binaire ($y_t \in \{-1,1\}$)}
-	\begin{columns}
-		\begin{column}{.2 \linewidth}
-			\centerline{\includegraphics[width=\linewidth]{figs/cap-loss.png}}
-		\end{column}
-		\begin{column}{.8 \linewidth}
-			\begin{itemize}
-				\item Classifieurs binaires ($y_t \in \{-1,1\}$)~:
-				$$ l_t = \left[1 - y_t \langle w_{t-1}, x_t \rangle \right]_+$$
-			
-			\end{itemize}
-		\end{column}		
-	\end{columns}
-\end{frame}
-
-\begin{frame}
-	\frametitle{La perte "Hinge" multiclasse ($y_t \in \{1,...,K\}$)}
-		\begin{exampleblock}{}
-			$
-			\left.
-			\begin{array}{l}
-			W = (w_1,..,w_K) \in \mathbb{R}^{K d}\\
-			X_t^k \triangleq (\vec{0}, ...,  x_t, ..., \vec{0}) \in \mathbb{R}^{K d}
-			\end{array}
-			\right\}
-			\text{ tels que : }
-			\langle W, X^k_t\rangle = \langle w_k, x_t\rangle
-			$
-			
-		\end{exampleblock}
-		
-	\begin{columns}
-		\begin{column}{.2 \linewidth}
-			\centerline{\includegraphics[width=\linewidth]{figs/cap-loss.png}}
-		\end{column}
-		\begin{column}{.8 \linewidth}
-			\begin{itemize}
-				\item Classifieurs multiclasse ~:
-				\begin{itemize}
-					\item Perte relative (Kessler)~:
-					$$l_t =  \left[ 1 +  \langle W_{t-1}, X_t^y \rangle - \max_{k \neq y} \langle W_{t-1}, X_t^k\rangle\right]_+$$
-					\item Perte absolue (One-Versus-All)~:
-					$$l_t = \sum_{k=1}^K \left[1 + (1 - 2 \delta(y_t,k)) \langle W_{t-1}, X_t^k\rangle\right]_+$$
-					
-				\end{itemize}
-			\end{itemize}
-		\end{column}		
-	\end{columns}
-\end{frame}
-
-\begin{frame}\frametitle{Minimisation en ligne du risque empirique}
+\begin{frame}{Main result}
+	Let :
 	\begin{itemize}
-		\item Approche "passive-agressive" \cite{crammer2006online}
-		\item Optimisation quadratique "locale" : $\forall t$, résoudre: 
-		$$W_{t} = \arg \min_W \frac{1}{2} \| W - W_{t-1}\|^2 + C \xi^2 \hbox{ s.t. } l_t \leq \xi$$
-		\item Mise à jour~:
-		$$W_{t} =  W_{t-1} + \frac{l_t}{2\|x_t\|^2 + \frac{1}{2C}}  (X_t^{y_t} - \max_{k \neq y} X_t^k)$$
-		\item Dans le cas linéairement séparable~:
-		$$\sum_{t=1}^{T} l_t^2 \leqslant 4 R^2 \parallel{U}\parallel^2$$
+		\item ${\color{red}\tilde{y}}$ be the current response (random variable);
+		\item ${\color{green}y}$ be the actual label associated with $X$
+		\item $\boldsymbol{g}(X,{\color{red}\tilde{y}})) = {\color{violet}r_t} \left(X^{\tilde{y}_t} - \sum_k \pi(k|X) X^k \right)$ be the policy gradient
+	\end{itemize}
+	Then :
+	\begin{exampleblock}{}
+$$\mathbb{E}_{\tilde{\mathcal{Y}}|\mathcal{X} = X}(\boldsymbol{g}(X,{\color{red}\tilde{y}})) = \underbrace {(r^+ - r^-) \pi({\color{green}y}|X)}_\text{=1?}
+\underbrace{\left(X^{\color{green}y} - \sum_k  \pi(k|X) X^k \right)}_\text{Logistic gradient}$$
+	\end{exampleblock}	
+\end{frame}	
+
+\begin{frame}{Multiclass PG with binary guiding recipe}
+
+	\begin{tiny}
+		\begin{exampleblock}{}
+			\begin{align*}
+			\text{cov}_{\mathcal{X},\mathcal{Y}}(\boldsymbol{g}(X,{\color{red}\tilde{y}})) 
+			=& \mathbb{E}_\mathcal{X} \left[ \left( r^- + (1-\pi({\color{green}y}|X) (r^+ - r^-) \right)^2 
+				\frac{\pi({\color{green}y}|X)}{(1-\pi({\color{green}y}|X))} {\color{green}\boldsymbol{g}}(X)^T {\color{green}\boldsymbol{g}}(X)\right]\\
+			&+ {r^-}^2 \mathbb{E}_\mathcal{X}\left[\tilde{\boldsymbol{\Sigma}}(X)\right]
+			+ (r^+-r^-)^2 \text{cov}_\mathcal{X} \left[\frac{\pi({\color{green}y}|X)}{(1-\pi({\color{green}y}|X))}{\color{green}\boldsymbol{g}}(X)\right]
+			\end{align*}
+		\end{exampleblock}
+	\end{tiny}	
+
+	
+Consider
+\begin{itemize}
+	\item $a = r^+ - r^-$ the reward "amplitude"
+	\item $b \in [0,1]$ the reward "baseline" : $\left|\frac{r^+}{r^-}\right| = \frac{1-b}{b}$
+\end{itemize}
+Then with $\pi^+ = \mathbb{E}_\mathcal{X}(\pi({\color{green}y}|X))$:
+\begin{itemize}
+	\item Take $a =  \frac{1}{\pi^+}$ (logistic gradient "speed")
+	\item Take $b =  \frac{\pi^+(1-\pi^+)}{1+\pi^+ - \frac{2}{K}}$ (variance reduction)
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Learning and forgetting : Regularized Policy gradient update}
+	\vspace{-.8cm}
+	\begin{itemize}
+		\item Regularized optimization ($\lambda$ hyperparameter):
+		\vspace{-.4cm} 
+		$$\max _{\boldsymbol{W}} \mathcal{H} = \max _{\boldsymbol{W}} E(r) - \frac{\lambda}{2}||\boldsymbol{W}||^2$$
+		\vspace{-.4cm}
+		\item Regularized gradient ascent : 
+		\footnotesize{$\nabla_W \mathcal{H} = {E}({\color{blue}r\nabla_W\ln\pi({\color{red}\tilde{y}}|X)}) - \lambda W$ }
+		\begin{itemize}
+			\item Gradient estimator (stochastic gradient) :
+			\vspace{-.2cm} 
+			$$
+			% E(  r \nabla_\mathbf{w}\ln\pi(\underline{\mathbf{x}},y,\mathbf{w}) ) 
+			%  \simeq 
+			\left\langle {\color{blue}{\color{violet}r_t} \nabla_W\ln\pi({\color{red}\tilde{y}_t}|X_t)}\right\rangle_{1..T} $$
+			\item Online update (learning rate $\eta << 1$):
+			\vspace{-.2cm} 
+			\begin{align}
+			W &\leftarrow W + \eta ( {\color{blue}{\color{violet}r} \nabla_W\ln\pi({\color{red}\tilde{y}}|X)} - \lambda W) \nonumber \\
+			&= (1 - \eta \lambda) W + \eta {\color{blue}{\color{violet}r} \nabla_W\ln\pi({\color{red}\tilde{y}}|X)} \nonumber
+			\end{align}
+		\end{itemize}
+		\vspace{-.2cm}
+		\item The old examples ``fade away'' as time passes
+		$\rightarrow$ tracking algorithm and novelty detection (Kivinen et al, 2010)
 	\end{itemize}
 \end{frame}
 
+\begin{frame}\frametitle{Kernel extension}
+\begin{exampleblock}{}
+\footnotesize
+\begin{align*}
+&\text{4. Update :} 
+&& W_t(.) = (1 - \eta \lambda) W_{t-1}(.) + \eta {\color{violet}r_t} \left(\mathcal{K}(X_t^{\tilde{y}_t},.) - \sum_k \pi(k|X_t) \mathcal{K}(X_t^k,.) \right) 
+\end{align*}
+\normalsize
+\end{exampleblock}
+Or :
+\begin{exampleblock}{}
+	$$W_t(.) = \sum_{u=1}^{t} \sum_{k=1}^K \alpha_{k,u} \beta_{t-u} \mathcal{K}(X^k_t,.)$$
+\end{exampleblock}
+	with : 
+	$$ \alpha_{k,u} = \eta {\color{violet}r_u} (\delta({\color{red}\tilde{y}_u},k) - \pi(k|X_u;W_u))$$
+	and
+	$$
+	\beta_v = (1-\eta\lambda)^v
+	$$   
+\end{frame}
 
-\begin{frame}\frametitle{Perte Hinge : réduction au cas du "bandit"}
+\subsection{Zhong, H and Daucé, E, hal-01345825, submitted}
+
+\begin{frame}
+	\tableofcontents[currentsubsection]
+\end{frame} 
+
+
+\begin{frame}\frametitle{Online empirical risk minimization}
+	\footnotesize
+	\begin{itemize}
+		\item "Passive-agressive" approach \cite{crammer2006online}
+		\item "Kessler" Hinge loss : $l_t =  \left[ 1 -  \langle W_{t-1}, X^{\color{green}y}_t \rangle + \max_{k \neq y} \langle W_{t-1}, X_t^k\rangle\right]_+$
+		\item Local quadratic optimization : $\forall t$, solve: 
+		$$W_{t} = \arg \min_W \frac{1}{2} \| W - W_{t-1}\|^2 + C \xi^2 \hbox{ s.t. } l_t \leq \xi$$
+		\item Update~:
+		$$W_{t} =  W_{t-1} + \frac{l_t}{2\|X_t\|^2 + \frac{1}{2C}}  (X_t^{y_t} - \max_{k \neq y_t} X_t^k)$$
+		\item In the linearly separable case~:
+		$$\sum_{t=1}^{T} l_t^2 \leqslant 4 R^2 \parallel{U}\parallel^2$$
+	\end{itemize}
+	\normalsize
+\end{frame}
+
+
+\begin{frame}\frametitle{Hinge loss: "Bandit" reduction}
 	\begin{columns}
 		\begin{column}{.2 \linewidth}
 			\centerline{\includegraphics[width=\linewidth]{figs/cap-loss.png}}
 		\end{column}
 		\begin{column}{.8 \linewidth}
 			\begin{itemize}
-				\item Réduction (échantillon) de la perte OVA~: 
+				\item Reduction (sample) of the OVA loss~: 
 				$$l_t =  \left[1 + (1 - 2 {\color{red}\delta(y_t,\tilde{y}_t)}) \langle W_{t-1}, X_t^{\tilde{y}_t}\rangle\right]_+$$
 
-				\item Minimisation en ligne du risque empirique~:
-				$$W_{t} =  W_{t-1} + \frac{l_t}{\|x_t\|^2 + \frac{1}{2C}}  (2 {\color{red}\delta(y_t,\tilde{y}_t)} - 1) X_t^{\tilde{y}_t}$$		
-				\item Agressivité / conservatisme ($C \rightarrow \infty$)~:
+				\item Online empirical risk minimization~:
+				$$W_{t} =  W_{t-1} + \frac{l_t}{\|X_t\|^2 + \frac{1}{2C}}  (2 {\color{red}\delta(y_t,\tilde{y}_t)} - 1) X_t^{\tilde{y}_t}$$		
+				\item Aggressiveness / conservatism ($C \rightarrow \infty$)~:
 				\begin{itemize}
-					\item apprentissage en un coup
-					\item sensibilité aux erreurs de label
+					\item "one-shot" update
+					\item label-error sensitivity
 				\end{itemize}	
 			\end{itemize}
 		\end{column}
@@ -507,7 +556,7 @@ Related problems :
 \end{frame}
 
 \begin{frame}
-	\frametitle{Le Bandit "passif-agressif" (BPA)}
+	\frametitle{Bandit "Passive-Aggressive"  (BPA)}
 %	\begin{exampleblock}{}
 %		$
 %		\left.
@@ -525,99 +574,109 @@ Related problems :
 	\begin{block}{}
 		$\forall t \in 1,...,T :$
 		\begin{align*}
-		&\text{1. Lire } 
+		&\text{1. Read } 
 		&& x_t 
 		\\
-		&\text{2. Choisir :} 
+		&\text{2. Choose :} 
 		&& \hat{y}_t = \underset{k \in\{1,..,K\}}{\text{argmax}}  \langle W_{t-1}, X_t^k \rangle 
 		\\
 		& %\text{3. Décision }\tilde{y}_t\text{ : } 
 		&& \tilde{y}_t \sim (1-\varepsilon) \delta(k,\hat{y}_t) + \frac{\varepsilon}{K} 
 		\\	
-		&\text{3. Lire } 
+		&\text{3. Read } 
 		&& {\color{red} f_t = \delta(\tilde{y}_t ,y_t)}  
 		\\
-		&\text{4. Mettre à jour :} 
-		&& W_t = W_{t-1} + \frac{l_t}{\|x_t\|^2 + \frac{1}{2C}} (2{\color{red}f_t}-1)\cdot X_t^{\tilde{y}_t}
+		&\text{4. Update :} 
+		&& W_t = W_{t-1} + \frac{l_t}{\|X_t\|^2 + \frac{1}{2C}} (2{\color{red}f_t}-1)\cdot X_t^{\tilde{y}_t}
 		\end{align*}
 	\end{block}
 	
 \end{frame}
 
-\begin{frame}{Cas linéairement séparable}
+\begin{frame}{Linearly separable case}
 	\begin{theorem}
-		\label{theo:BPAT1}
-		Soit $(x_1,y_1),...,(x_T,y_T)$ une séquence d'exemples linéairement séparables où $x_t \in \mathbb{R}^d$, $y_t\in \{1,...,K\}$ et $\parallel x_t \parallel\leqslant R$ pour tout $t$, soit $\tilde{y}_1,...,\tilde{y}_T$ une séquence de réponses, et soit $U \in \mathbb{R}^{K\times d}$ tel que $ \forall t, l^*_t=0$. Alors, en supposant $C \rightarrow \infty$, la perte au carré cumulée du BPA est bornée par:
-		\begin{equation*}
-		\sum_{t=1}^{T} l_t^2 \leqslant R^2\cdot \parallel{U}\parallel^2
-		\end{equation*}
+		Let $(x_1,y_1),...,(x_T,y_T)$ be a sequence of separable examples where $x_t \in \mathbb{R}^d$, $y_t\in \{1,...,K\}$ and $\parallel x_t\parallel\leqslant R$ for all t, let $\tilde{y}_1,...,\tilde{y}_T$ be a sequence of responses, with $\tilde{y}_t\in \{1,...,K\}$, 
+		and let $U \in \mathbb{R}^{K d}$ be such that $ \forall t, l^*_t=0$. Then, assuming $C \rightarrow \infty$, the cumulative squared loss of BPA is bounded by:
+		\begin{equation}
+		\sum_{t=1}^{T} l_t^2 \leqslant R^2 \parallel{U}\parallel^2
+		\end{equation}
 	\end{theorem}
 	
-	\begin{alertblock}{Attention!!}
-		La somme des pertes au carré n'est pas ici un majorant de la somme des erreurs de prédiction.
+	\begin{alertblock}{Warning!!}
+		The squared loss sum is not here an upper bound of the number of classification errors.
 	\end{alertblock}
 \end{frame}
 
-\begin{frame}{Conditions supplémentaires}
-	On peut montrer que, pour une politique de choix "avide"~:
-	\begin{itemize}
-		\item Si $\exists t^*$ tel que $\forall t \geq t^*, l_t =0$
-		\item Si les vecteurs d'observation  de la classe $k$ sont issus d'un ensemble convexe $\mathcal{C}_k \subset \mathbb{R}^d$
-		\item Si $\exists t \geq t^*$ tel que $\tilde{y}_t = y_t = k$
-	\end{itemize}
-	alors \textit{tous} les exemplaires de la classe $k$ sont correctement classifiés par $W_t$ pour $t \geq t^*$.
+\begin{frame}{Additional conditions}
+	Consider the greedy choice $\tilde{y}_t = \hat{y}_t = \underset{k \in\{1,..,K\}}{\text{argmax}}  \langle W_{t-1}, X_t^k \rangle$ ~:
+	\begin{columns}
+		\begin{column}{.74\linewidth}
+			\begin{itemize}
+				\item if all $X^k$'s $k$ belong to a convex set $\mathcal{C}_k \subset \mathbb{R}^d$
+				\item If $\exists t^*$ so that $\forall t \geq t^*, l_t =0$
+				\item If $\exists t \geq t^*$ so that $\tilde{y}_t = y_t = k$
+			\end{itemize}
+		\end{column}
+		\begin{column}{.24\linewidth}
+			\includegraphics[width=\linewidth]{figs/sep-convex.png}
+		\end{column}
+	\end{columns}
 	
-	Cette situation peut en outre être garantie presque sûrement si: 
+	then \textit{all} examples from $C_k$ are correctly classified for $t \geq t^*$.
+	\vspace{.5cm}
+	
+	Moreover, this can be assumed almost surely if: 
 	$$\tilde{y}_t \sim (1-\varepsilon) \delta(k,\hat{y}_t) + \frac{\varepsilon}{K} $$
+	($\varepsilon$-greedy)
 \end{frame}
 
-\begin{frame}{Cas stationnaire}
+\begin{frame}{Non-separable stationary case}
 	\begin{footnotesize}
 	\begin{theorem}
-		Soit $(x_1,y_1),...,(x_T,y_T)$ une séquence d'exemples linéairement séparables où $x_t \in \mathbb{R}^d$, $y_t\in \{1,...,K\}$ et $\parallel x_t \parallel\leqslant R$ pour tout $t$, soit $\tilde{y}_1,...,\tilde{y}_T$ une séquence de réponses, et soit $U \in \mathbb{R}^{K\times d}$ un classifieur quelconque. Alors, en supposant $C \rightarrow \infty$, la perte au carré cumulée du BPA est bornée par:
-		\begin{equation*}
-	\sum_{t=1}^{T}l_t^2 \leqslant \left(R\parallel{U}\parallel+2 \sqrt{\sum_{t=1}^{T}(l_t^{\ast})^2}\right)^2 
-		\end{equation*}
+
+		Let $(x_1,y_1),...,(x_T,y_T)$ be a sequence of examples where $x_t \in \mathbb{R}^d$, $y_t\in \{1,...,K\}$ and $\parallel x_t \parallel\leqslant R$ for all t, let $\tilde{y}_1,...,\tilde{y}_T$ be a sequence of responses, with $\tilde{y}_t\in \{1,...,K\}$. Then for any  $U \in \mathbb{R}^{K d}$, and assuming $C \rightarrow \infty$, the cumulative squared loss of BPA is bounded by:
+		\[\sum_{t=1}^{T}l_t^2 \leqslant \left(R\parallel{U}\parallel+2 \sqrt{\sum_{t=1}^{T}(l_t^{\ast})^2}\right)^2 \]
 	\end{theorem}
 
 	\begin{alertblock}{}
 		\begin{itemize}
-			\item Pour les temps longs, une perte moyenne au pire double de la perte optimale
-			\item Nécessite un $C$ fini pour atteindre un regret en $O(\sqrt{T})$
+			\item For large $T$, the loss is at worst twice of the optimal loss 
+			\item Needs a finite $C$ to reach an $O(\sqrt{T})$ regret
 		\end{itemize}
 	\end{alertblock}
 	\end{footnotesize}
 \end{frame}
 
-\begin{frame}{Extension à l'approche noyaux}
+\begin{frame}{Kernel extension}
 
-	\begin{itemize}
-		\item Soit $\mathcal{K}(.,.)$ une application de $ \mathbb{R}^d \times \mathbb{R}^d$ dans $ \mathbb{R}^+$ ayant la propriété de reproduction,
-		\item soit $\mathcal{H}$ le RKHS correspondant,
-	\item Soit $\mathcal{K}(x,.)$ la projection de l'exemplaire $x$ dans $\mathcal{H}$. 
-	\item Alors : 
-	%$$\forall w \in \mathcal{H}, \langle w,\mathcal{K}(x,.)\rangle_\mathcal{H} = w(x) $$
-	\end{itemize}
-	\begin{footnotesize}
-	\begin{exampleblock}{}
-		$
-		\left.
-		\begin{array}{l}
-		W = (w_1,..,w_K) \in \mathcal{H}^K\\
-		X_t^k \triangleq (0(.), ..., \mathcal{K}(x_t,.), ..., 0(.)) \in \mathcal{H}^{K}
-		\end{array}
-		\right\}
-		\langle W,X^k\rangle \triangleq \langle w_k,\mathcal{K}(x,.)\rangle_\mathcal{H} = w_k(x)
-		$
-		
-	\end{exampleblock}
-	\end{footnotesize}	
+\begin{block}{}
+	\small
+	\begin{align*}
+		\text{4. Update :} 
+		&& W_t(.) = W_{t-1}(.) + \frac{l_t}{\mathcal{K}(X_t,X_t) + \frac{1}{2C}} (2{\color{red}f_t}-1)\cdot \mathcal{K}(X_t^{\tilde{y}_t},.)
+	\end{align*}
+	\normalsize
+\end{block}
+
+Or :
+\begin{exampleblock}{}
+	$$W_t(.) = \sum_{u=1}^{t} \alpha_u  \mathcal{K}(X_t^{\tilde{y}_u},.)$$
+\end{exampleblock}
+with : 
+$$ \alpha_{u} = \frac{l_u}{\mathcal{K}(X_u,X_u) + \frac{1}{2C}} (2{\color{red}f_u}-1)
+$$
+
+
 \end{frame}
 
-\section{Expériences}
-\subsection{}
+\section{Numerical experiments}
+\subsection{Zhong, H and Daucé, E, hal-01345825, submitted}
 
-\begin{frame}{Expérimentations}
+\begin{frame}
+	\tableofcontents[currentsubsection]
+\end{frame} 
+
+\begin{frame}{Datasets}
 	\begin{table}[h]
 		\caption{Five datasets considered, with $n$ the number of instances, $d$ the vectors dimension and $K$ the number of labels.}
 		\label{table:mce}
@@ -639,7 +698,7 @@ Related problems :
 	\end{table}
 \end{frame}
 
-\begin{frame}{Expérimentations}
+\begin{frame}{Parameters}
 	\begin{small}
 	\begin{table}[h]
 		\caption{Parameters setting for different algorithms and different datasets. }
@@ -704,23 +763,23 @@ Related problems :
 	\end{small}
 \end{frame}
 
-\begin{frame}{Taux d'exploration}
+\begin{frame}{Exploration rate}
 	%\begin{figure}[htp]
 		%\centerline{\bf (a)}
 		\begin{columns}
 			\begin{column}{.5\linewidth}
 				\centerline{\includegraphics[width=\linewidth]{figs/SynNonSep_gamma.eps}}
 				%\centerline{\bf (b)}
-				\centerline{\includegraphics[width=\linewidth]{figs/Reuters_gamma.eps}}
 			\end{column}
 			\begin{column}{.5\linewidth}
-				\begin{itemize}
-					\item Taux d'erreur final en fonction du taux d'exploration $\varepsilon$
-					\item SynNonSep (top) and Reuters (bottom) datasets.
-				\end{itemize}
+				\centerline{\includegraphics[width=\linewidth]{figs/Reuters_gamma.eps}}
 			\end{column}	
 		\end{columns}
 		
+		\begin{itemize}
+			\item Final error rate in function of $\varepsilon$
+			\item SynNonSep (left) and Reuters (right) datasets.
+		\end{itemize}
 		%\end{figure}
 		
 		%\begin{figure}[ht!]
@@ -730,127 +789,382 @@ Related problems :
 	%\end{figure}
 \end{frame}
 
-\begin{frame}{Erreur cumulée}
-			\begin{columns}[t]
-				\begin{column}{.5\linewidth}
+\begin{frame}{SynSep Cumulative errors }
+			
 	\centerline{
-		\includegraphics[width=\linewidth]{figs/SynSep.eps}
+		\includegraphics[width=.7\linewidth]{figs/SynSep.eps}
 	}
 	
-	\centerline{
-		\includegraphics[width=\linewidth]{figs/SynNonSep.eps}
-	}
-				\end{column}
-				\begin{column}{.5\linewidth}
-		\centerline{
-			\includegraphics[width=\linewidth]{figs/RCV1_v2_53class.eps}}
-		\begin{footnotesize}
+			
+	\begin{footnotesize}
 		\begin{itemize}
-			\item Perceptron, PA, Banditron, Confidit et BPA
-			\item SynSep (9 classes), SynNonSep (9 classes) et Reuters (53 classes)
+			\item Perceptron, PA, Banditron, Confidit and BPA
+			\item 9 classes, $d = 400$
 		\end{itemize}
-		\end{footnotesize}
-
-		\end{column}	
-			\end{columns}
+	\end{footnotesize}
+	
 \end{frame}
 
-\begin{frame}{Fonctions noyaux}
+\begin{frame}{SynNonSep Cumulative errors }
+	
+			\centerline{
+				\includegraphics[width=.7\linewidth]{figs/SynNonSep.eps}
+			}
+	
+	\begin{footnotesize}
+		\begin{itemize}
+			\item Perceptron, PA, Banditron, Confidit and BPA
+			\item 9 classes, $d = 400$
+		\end{itemize}
+	\end{footnotesize}
+	
+\end{frame}
+
+\begin{frame}{Reuters Cumulative errors}
+	
+
+			\centerline{
+				\includegraphics[width=.7\linewidth]{figs/RCV1_v2_53class.eps}}
+	
+	
+	\begin{footnotesize}
+		\begin{itemize}
+			\item Perceptron, PA, Banditron, Confidit and BPA
+			\item 53 classes, $d = 47236$
+		\end{itemize}
+	\end{footnotesize}
+	
+\end{frame}
+
+\begin{frame}{Segment (with Kernels)}
 	\begin{columns}[t]
-		\begin{column}{.45\linewidth}
-\centerline{
-	\includegraphics[width=\linewidth]{figs/Segment_kernel_T.png}}
-\centerline{\includegraphics[width=\linewidth]{figs/Pendigits_kernel_T.png}}			
+		\begin{column}{.5\linewidth}
+
+	\includegraphics[width=\linewidth]{figs/Segment_kernel_T.png}
+
 		\end{column}
-		\begin{column}{.45\linewidth}
-	\centerline{
-		\includegraphics[width=\linewidth]{figs/Segment_kernel_CM.png}}
-	\centerline{
-		\includegraphics[width=\linewidth]{figs/Pendigits_kernel_CM.png}}
+		\begin{column}{.5\linewidth}
+
+		\includegraphics[width=\linewidth]{figs/Segment_kernel_CM.png}
+
+
 		\end{column}	
 	\end{columns}
+	
+		\begin{footnotesize}
+			\begin{itemize}
+				\item BPA, K-BPA, K-SGD, K-Banditron
+				\item 7 classes, $d = 19$
+			\end{itemize}
+		\end{footnotesize}
 \end{frame}
+
+
+\begin{frame}{Pendigits (with Kernels)}
+	\begin{columns}[t]
+		\begin{column}{.5\linewidth}
+			\includegraphics[width=\linewidth]{figs/Pendigits_kernel_T.png}			
+		\end{column}
+		\begin{column}{.5\linewidth}
+				\includegraphics[width=\linewidth]{figs/Pendigits_kernel_CM.png}
+		\end{column}	
+	\end{columns}
+	\begin{footnotesize}
+		\begin{itemize}
+			\item BPA, K-BPA, K-SGD, K-Banditron
+			\item 10 classes, $d = 16$
+		\end{itemize}
+	\end{footnotesize}
+\end{frame}
+
+\subsection{Daucé, E, Proix, T, Ralaivola, L; proc. of IJCNN 2015}
+\begin{frame}
+	\tableofcontents[currentsubsection]
+\end{frame} 
+
+\begin{frame} \frametitle{P300 speller}
+	\vspace{-.3cm}
+\footnotesize
+	\begin{itemize}
+		\item EEG : 
+		\vspace{-.1cm}		
+		\begin{itemize}
+			\item 10 - 60 channels (surface electric potential - H Berger, 1929)
+			\item high temporal resolution / low spatial resolution
+			\item noisy, non-reliable,... ``Evoqued potentials'' technique
+			\item the ``P300'' ERP is ``surprise'' effect (``oddball'' paradigm)
+		\end{itemize}
+	\end{itemize}
+	\vspace{-.3cm}
+	\begin{columns}
+		\begin{column}{0.75\linewidth}
+			\begin{itemize}
+				\item P300-speller (Farwell and Donchin, 1988):
+				\begin{itemize}
+					\item based on the ``oddball'' paradigm
+					\item 6 x 6 letters grid
+					\item random row/column magnification (every 150-300 ms)
+					\item row/column evidence build-up + argmax choice
+					\item low SNR / low bit rate (many flashes for one letter)
+					\item spelling accuracy tends to decrease in the long run
+				\end{itemize}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.25\linewidth}
+			\centerline{
+				\includegraphics[width=\linewidth]{figs/P300_grid.png}
+			}
+		\end{column}
+	\end{columns}
+\normalsize
+\end{frame}
+
+\begin{frame}\frametitle{EEG data (from Inserm U1028, Lyon, France)}
+	\includegraphics[width=\linewidth]{figs/EEG.png}
+\end{frame}
+
+\begin{frame}\frametitle{Data processing pipeline}
+
+	\centerline{
+		\includegraphics[width=.9\linewidth]{figs/overview.png}
+	}
+\end{frame}
+
+\begin{frame}{Rewards in classifiction}
+
+	\begin{itemize}
+
+		\item Online stochastic classifier :
+		\begin{itemize}
+			\item read input observations set : $X = (\boldsymbol{x}_1,...,\boldsymbol{x}_K)$
+			\item give a score to every class : $\forall k, \pi(k|X;W) =  \frac{\exp\langle W, X^k\rangle}
+			{\sum_{\ell}  \exp\langle W, X^\ell\rangle}$ 
+			\item choose the response at random (Softmax choice)
+			\item read the \emph{reward} $r$
+			\item update $W$
+		\end{itemize}
+		\item Which reward ?
+		\begin{itemize}
+			\item ``error'' potential after the classifier's response:
+			\centerline{\includegraphics[width=0.7\linewidth]{figs/online_P300.pdf}}
+			\item ``BACKSPACE'' key on the virtual keyboard
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Softmax/Argmax spelling improvement}
+	\centerline{\includegraphics[width=0.7\linewidth]{figs/PG_softmax.png}}
+\end{frame}
+
+%\begin{frame}\frametitle{XDAWN spatial filter}
+%	\vspace{-.8cm}
+%	\cite{Rivet09}
+%	\centerline{
+%		\includegraphics[width=0.7\linewidth]{ijcnn-eeg-filt}
+%	}
+%\end{frame}
+
+\begin{frame}\frametitle{Classification improvement after a 25-trials training session}
+	%\vspace{-1cm}
+	\centerline{
+		\includegraphics[width=.9\linewidth]{figs/fig_filter_adapt}
+	}
+\end{frame}
+
+\begin{frame}\frametitle{Global recovery after electrode break
+	}
+	\centerline{
+		\includegraphics[width=0.9\linewidth]{figs/fig_invalid}
+	}
+\end{frame}
+
+\begin{frame}\frametitle{Individual recovery, label noise = 10\%}
+	\centerline{
+		\includegraphics[width=0.7\linewidth]{figs/ijcnn-subj-break-n01}
+	}
+\end{frame}
+
+\begin{frame}\frametitle{Individual recovery, label noise = 30\%}
+	\centerline{
+		\includegraphics[width=0.7\linewidth]{figs/ijcnn-subj-break-n03}
+	}
+\end{frame}
+
 
 \section{Conclusion}
 \subsection{}
+\begin{frame}
+	\tableofcontents[currentsection]
+\end{frame} 
+
 \begin{frame}{Conclusion}
-	\begin{itemize}
-		\item Passive Aggressive Bandit feedback~:
-		\begin{itemize}
-			\item Une information d'étiquetage limitée (1-bit)
-			\item Un apprentissage actif (par sondage) sur l'espace des labels 
-			\item Principe d'aversion à l'erreur (OVA)
-			\item Minimisation en ligne du risque empirique (optimisation quadratique locale sous contraintes)
-		\end{itemize} 
-		\item La perte au carré est bornée dans le cas linéairement séparable
-		\item Des conditions raisonnables de redondance des données assurent un classification correcte en environnement stationnaire
-		\item Parcimonie
-		\item Facile à mettre en œuvre
-		\item Passage à l'échelle OK (coût linéaire en espace)
-	\end{itemize}
-\end{frame}
-
-\begin{frame}{Remarques}
-	\begin{alertblock}{Un résultat contre intuitif}
-		\begin{itemize}
-		\item Agressivité / one shot / parcimonie:
-		\begin{itemize}
-			\item En principe : réponse exagérée au bruit de label
-			\item Mise à jour sous-optimale dans les environnements stochastiques (bandit)
-		\end{itemize}  
-		\item L'aggressivité de l'algorithme nécessite d'être atténuée par un paramètre de "raideur" $C$
-			\begin{itemize}
-				\item $\rightarrow$ Regret en $O(\sqrt{T})$ dans le cas stationnaire
-				\item Bonne résistance au bruit de label
-			\end{itemize}
-		\item Sous-échantillonnage d'un problème sur-contraint
-		\end{itemize}
-	\end{alertblock}
-	
-	\begin{exampleblock}{Mise en oeuvre pratique}
-		\begin{itemize}
-		\item Validation croisée pour $C$ (valeur spécifique au problème)
-		\item Faire décroître $\varepsilon$ au cours du temps.
-		\end{itemize}
-	\end{exampleblock}
-		
-\end{frame}
-
-\begin{frame}{Questions ouvertes}
-	\begin{itemize}
-		\item Vers un apprentissage moins agressif? Basé sur un modèle?
-		\begin{itemize}
-			\item Moindre parcimonie
-			\item Risque de sensibilité au déséquilibre de classe (OVA)
-			\item Borne d'erreur plus difficile à prouver
-		\end{itemize}  
-		\item Extension aux environnements de jeux/avec adversaire :
-		\begin{itemize}
-			\item Extension au cas non-stationnaires \cite{kivinen2004online} 
-			\item Coups multiples, récompense différée (temporal credit assignment) \cite{sutton1998reinforcement}
-			\item IHM, personal computing, compagnons,..
-		\end{itemize}  		
-		\item Continuum entre l'apprentissage supervisé et l'apprentissage par renforcement?
-	\end{itemize}
-	\vspace{-.7cm}
-	\begin{columns}[t]
-		\begin{column}{.01\linewidth}
+\footnotesize
+	\begin{columns}
+		\begin{column}{.5\linewidth}
+			{\bf Policy gradient}
+			\begin{exampleblock}{Pros}
+				\begin{itemize}
+					\item Cheap (linear cost)
+					\item Neural networks / Multinomial generative friendly (logistic gradient)
+					\item Label noise resistance
+					\item 2nd order expandable
+				\end{itemize}				
+			\end{exampleblock}		
+			\begin{alertblock}{Cons}
+				\begin{itemize}
+					\item Non-sparse
+					\item $\eta, \lambda$ parameter fitting 
+				\end{itemize}				
+			\end{alertblock}		
 		\end{column}
-		\begin{column}{.4\linewidth}
-			\begin{small}
-			\begin{itemize}
-				\item Cas des labels multiples
-				\item Un "crédit" d'information entre 1 et $K$?
-			\end{itemize} 
-			\end{small}
-		\end{column}
-		\begin{column}{.4\linewidth}
-			\begin{block}{}
-				\centerline{\includegraphics[width=\linewidth]{figs/cap-frog.png}}
-			\end{block}
+		\begin{column}{.5\linewidth}
+			{\bf  OVA online quadratic optimization}
+			\begin{exampleblock}{Pros}
+				\begin{itemize}
+					\item Cheap (linear cost)
+					\item Sparse
+					\item Upper bound when linearly separable
+				\end{itemize}						
+			\end{exampleblock}						
+			\begin{alertblock}{Cons}
+				\begin{itemize}
+					\item Aggressive update $\rightarrow$ label noise sensitivity
+					\item Needs an optimal "stiffness" $C$ hyperparameter (cross-validated)
+					\item Non deterministic : needs an $\varepsilon$ (possibly decreasing)
+				\end{itemize}				
+			\end{alertblock}		
 		\end{column}
 	\end{columns}
+\normalsize
+%	\begin{itemize}
+%		\item Passive Aggressive Bandit feedback~:
+%		\begin{itemize}
+%			\item Une information d'étiquetage limitée (1-bit)
+%			\item Un apprentissage actif (par sondage) sur l'espace des labels 
+%			\item Principe d'aversion à l'erreur (OVA)
+%			\item Minimisation en ligne du risque empirique (optimisation quadratique locale sous contraintes)
+%		\end{itemize} 
+%		\item La perte au carré est bornée dans le cas linéairement séparable
+%		\item Des conditions raisonnables de redondance des données assurent un classification correcte en environnement stationnaire
+%		\item Parcimonie
+%		\item Facile à mettre en œuvre
+%		\item Passage à l'échelle OK (coût linéaire en espace)
+%	\end{itemize}
+\end{frame}
+
+%\begin{frame}{Conclusion}
+%	\begin{itemize}
+%		\item Passive Aggressive Bandit feedback~:
+%		\begin{itemize}
+%			\item Une information d'étiquetage limitée (1-bit)
+%			\item Un apprentissage actif (par sondage) sur l'espace des labels 
+%			\item Principe d'aversion à l'erreur (OVA)
+%			\item Minimisation en ligne du risque empirique (optimisation quadratique locale sous contraintes)
+%		\end{itemize} 
+%		\item La perte au carré est bornée dans le cas linéairement séparable
+%		\item Des conditions raisonnables de redondance des données assurent un classification correcte en environnement stationnaire
+%		\item Parcimonie
+%		\item Facile à mettre en œuvre
+%		\item Passage à l'échelle OK (coût linéaire en espace)
+%	\end{itemize}
+%\end{frame}
+
+%\begin{frame}{Remarques}
+%	\begin{alertblock}{Un résultat contre intuitif}
+%		\begin{itemize}
+%		\item Agressivité / one shot / parcimonie:
+%		\begin{itemize}
+%			\item En principe : réponse exagérée au bruit de label
+%			\item Mise à jour sous-optimale dans les environnements stochastiques (bandit)
+%		\end{itemize}  
+%		\item L'aggressivité de l'algorithme nécessite d'être atténuée par un paramètre de "raideur" $C$
+%			\begin{itemize}
+%				\item $\rightarrow$ Regret en $O(\sqrt{T})$ dans le cas stationnaire
+%				\item Bonne résistance au bruit de label
+%			\end{itemize}
+%		\item Sous-échantillonnage d'un problème sur-contraint
+%		\end{itemize}
+%	\end{alertblock}
+%	
+%	\begin{exampleblock}{Mise en oeuvre pratique}
+%		\begin{itemize}
+%		\item Validation croisée pour $C$ (valeur spécifique au problème)
+%		\item Faire décroître $\varepsilon$ au cours du temps.
+%		\end{itemize}
+%	\end{exampleblock}
+%		
+%\end{frame}
+
+\begin{frame}{Open questions}
 	
+	\begin{itemize}
+		\item Unary coding + binary guiding :
+		\begin{itemize}
+			\item a more structured/constrained bandit problem
+			\item multiclass gradient, multiclass bounds
+		\end{itemize}
+		\item Adversarial case :
+		\begin{itemize}
+			\item the more robust, the less sparse?
+			\item learning and forgetting (tracking)
+		\end{itemize}
+     \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{More "challenging" open questions}
+	\begin{itemize}
+		\item Learning in:
+			\begin{itemize}
+				\item embedded controllers
+				\item real time
+				\item many decisions in limited time/limited resources
+				\item non-stationary environments
+			\end{itemize}
+		\item Binary guiding in nature :
+\centerline{\includegraphics[width=.4\linewidth]{figs/cap-frog.png}}		
+		\begin{itemize}
+			\item Label = actions?
+			\item Many actions = many labels
+			\item Complex motor realization space (many DOFs)
+			\item All or nothing
+		\end{itemize}
+		
+	\end{itemize}
+	
+%	\begin{itemize}
+%		\item Vers un apprentissage moins agressif? Basé sur un modèle?
+%		\begin{itemize}
+%			\item Moindre parcimonie
+%			\item Risque de sensibilité au déséquilibre de classe (OVA)
+%			\item Borne d'erreur plus difficile à prouver
+%		\end{itemize}  
+%		\item Extension aux environnements de jeux/avec adversaire :
+%		\begin{itemize}
+%			\item Extension au cas non-stationnaires \cite{kivinen2004online} 
+%			\item Coups multiples, récompense différée (temporal credit assignment) \cite{sutton1998reinforcement}
+%			\item IHM, personal computing, compagnons,..
+%		\end{itemize}  		
+%		\item Continuum entre l'apprentissage supervisé et l'apprentissage par renforcement?
+%	\end{itemize}
+%	\vspace{-.7cm}
+%	\begin{columns}[t]
+%		\begin{column}{.01\linewidth}
+%		\end{column}
+%		\begin{column}{.4\linewidth}
+%			\begin{small}
+%			\begin{itemize}
+%				\item Cas des labels multiples
+%				\item Un "crédit" d'information entre 1 et $K$?
+%			\end{itemize} 
+%			\end{small}
+%		\end{column}
+%		\begin{column}{.4\linewidth}
+%			\begin{block}{}
+%				\centerline{\includegraphics[width=\linewidth]{figs/cap-frog.png}}
+%			\end{block}
+%		\end{column}
+%	\end{columns}
+%	
 
 		
 \end{frame}
